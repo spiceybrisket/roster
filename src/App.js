@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import decode from "jwt-decode";
+import { useStore } from "./store/useStore";
+import { useRoutes } from "hookrouter";
+import AuthedPages from "./AuthedPages";
 
-function App() {
+import LoginPage from "./components/pages/LoginPage";
+import ForgotPasswordPage from "./components/pages/ForgotPasswordPage";
+import ResetPasswordPage from "./components/pages/ResetpasswordPage";
+
+import TopNavigation from "./components/navigaton/TopNavigation";
+
+const App = () => {
+  const { state } = useStore();
+
+  if (localStorage.rosterJWT) {
+    const decodedToken = decode(localStorage.rosterJWT);
+    const user = {
+      token: localStorage.rosterJWT,
+      email: decodedToken.email,
+      confirmed: decodedToken.confirmed,
+      rosterRole: decodedToken.rosterRole,
+      companyStaffId: decodedToken.companyStaffId,
+      companyId: decodedToken.companyId,
+      admin: decodedToken.admin
+    };
+    state.user = user;
+  }
+
+  const routes = {
+    "/forgot_password": () => <ForgotPasswordPage />,
+    "/login": () => <LoginPage />,
+    "/reset_password/:token": ({ token }) => <ResetPasswordPage />,
+
+    // Everything authenticated is handled in here.
+    "/authed*": () => <AuthedPages />
+  };
+
+  const result = useRoutes(routes);
+
+  const isAuthenticasted = !!state.user.token;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="ui container">
+      {isAuthenticasted && <TopNavigation />}
+      {result || "Not found"}
     </div>
   );
-}
+};
 
 export default App;
