@@ -1,23 +1,21 @@
 export const userInitialState = {
-  user: {
-    loggedIn: false
-  }
+  user: {}
 };
 
 export const userActions = {
   login: payload => {
     localStorage.rosterJWT = payload.token;
-    return { user: payload, isUserLoggedIn: true };
+    return { user: payload };
   },
   logout: payload => {
     localStorage.removeItem("rosterJWT");
     return { user: payload };
   },
-  loading_start: payload => {
-    return { loading: true };
+  query_running: payload => {
+    return { queryRunning: true };
   },
-  loading_end: payload => {
-    return { loading: false };
+  query_end: payload => {
+    return { queryRunning: false };
   },
   forgotPasswordRequest: payload => {
     return;

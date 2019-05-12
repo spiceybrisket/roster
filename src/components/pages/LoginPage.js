@@ -1,9 +1,9 @@
 import React from "react";
 import { useStore } from "../../store/useStore";
 import { navigate, A } from "hookrouter";
-import ForgotPasswordPage from "./ForgotPasswordPage";
-import LoginForm from "../forms/LoginForm";
 import api from "../../store/api";
+
+import LoginForm from "../forms/LoginForm";
 
 const LoginPage = props => {
   const { state, dispatch } = useStore();

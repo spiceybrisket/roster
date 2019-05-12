@@ -6,7 +6,7 @@ import AuthedPages from "./AuthedPages";
 
 import LoginPage from "./components/pages/LoginPage";
 import ForgotPasswordPage from "./components/pages/ForgotPasswordPage";
-import ResetPasswordPage from "./components/pages/ResetpasswordPage";
+import ResetPasswordPage from "./components/pages/ResetPasswordPage";
 
 import TopNavigation from "./components/navigaton/TopNavigation";
 
@@ -28,9 +28,12 @@ const App = () => {
   }
 
   const routes = {
-    "/forgot_password": () => <ForgotPasswordPage />,
+    "/": () => <LoginPage />,
     "/login": () => <LoginPage />,
-    "/reset_password/:token": ({ token }) => <ResetPasswordPage />,
+    "/forgot_password": () => <ForgotPasswordPage />,
+    "/reset_password/:token": ({ token }) => (
+      <ResetPasswordPage token={token} />
+    ),
 
     // Everything authenticated is handled in here.
     "/authed*": () => <AuthedPages />

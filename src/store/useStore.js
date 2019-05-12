@@ -32,10 +32,10 @@ const isPromise = obj => {
 const wrapperDispatch = dispatch => {
   return function(action) {
     if (isPromise(action.payload)) {
-      dispatch({ type: "loading_start" });
+      dispatch({ type: "query_running" });
       action.payload.then(v => {
         dispatch({ type: action.type, payload: v });
-        dispatch({ type: "loading_end" });
+        dispatch({ type: "query_end" });
       });
     } else {
       dispatch(action);
@@ -57,5 +57,6 @@ export const StoreProvider = ({ children }) => {
 
 export const useStore = store => {
   const { state, dispatch } = useContext(StoreContext);
+
   return { state, dispatch };
 };

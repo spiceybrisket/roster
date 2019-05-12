@@ -1,5 +1,5 @@
 import React from "react";
-import { useRoutes, navigate, useRedirect } from "hookrouter";
+import { useRoutes, navigate } from "hookrouter";
 
 import { useStore } from "./store/useStore";
 

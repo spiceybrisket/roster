@@ -1,41 +1,63 @@
-import React, { useSate } from "react";
+import React, { useState, useEffect } from "react";
 import { Message } from "semantic-ui-react";
-import { validateToken, resetPassword } from "../../actions/auth";
+import api from "../../store/api";
+import { navigate } from "hookrouter";
+
 import ResetPasswordForm from "../forms/ResetPasswordForm";
 
-const ResetPasswordPage = () =>{
-  state = {
-    loading: true,
-    success: false
+const ResetPasswordPage = ({ token }) => {
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const validateToken = token => {
+    return new Promise((resolve, reject) => {
+      api.user
+        .validateToken(token)
+        .then(resposneData => {
+          resolve(resposneData);
+        })
+        .catch(response => {
+          reject("Api call failed!");
+        });
+    });
   };
 
-  componentDidMount() {
-    this.props
-      .validateToken(this.props.match.params.token)
-      .then(() => this.setState({ loading: false, success: true }))
-      .catch(() => this.setState({ loading: false, success: false }));
-  }
+  const resetPassword = data => {
+    return new Promise((resolve, reject) => {
+      api.user
+        .resetPassword(data)
+        .then(resposneData => {
+          resolve(resposneData);
+        })
+        .catch(response => {
+          reject("Api call failed!");
+        });
+    });
+  };
 
-  const submit = data =>
-    this.props
-      .resetPassword(data)
-      .then(() => this.props.history.push("/login"));
+  useEffect(() => {
+    validateToken(token)
+      .then(() => {
+        setSuccess(true);
+        setLoading(false);
+      })
+      .catch(() => {
+        setSuccess(false);
+        setLoading(false);
+      });
+  });
 
+  const submit = data => resetPassword(data).then(navigate("/login"));
 
-    const { loading, success } = this.state;
-    const token = this.props.match.params.token;
-    return (
-      <div>
-        {loading && <Message>Loading</Message>}
-        {!loading && success && (
-          <ResetPasswordForm submit={this.submit} token={token} />
-        )}
-        {!loading && !success && <Message>Invalid Token</Message>}
-      </div>
-    );
-  }
-
-
-
+  return (
+    <div>
+      {loading && <Message>Loading</Message>}
+      {!loading && success && (
+        <ResetPasswordForm submit={submit} token={token} />
+      )}
+      {!loading && !success && <Message>Invalid Token</Message>}
+    </div>
+  );
+};
 
 export default ResetPasswordPage;

@@ -14,7 +14,6 @@ const ForgotPasswordForm = props => {
   const onSubmit = e => {
     e.preventDefault();
     const validateErrors = validate(data);
-    console.log(errors);
     setErrors(validateErrors);
 
     if (Object.keys(validateErrors).length === 0) {

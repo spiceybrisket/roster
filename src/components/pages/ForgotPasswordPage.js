@@ -10,13 +10,10 @@ const ForgotPasswordPage = () => {
   const [success, setSuccess] = useState(false);
 
   const asyncFetch = data => {
-    console.log(data.email);
     return new Promise((resolve, reject) => {
-      console.timeLog(data.email);
       api.user
         .resetPasswordRequest(data.email)
         .then(resposneData => {
-          console.log(resposneData);
           resolve(resposneData);
         })
         .catch(response => {
@@ -26,10 +23,8 @@ const ForgotPasswordPage = () => {
   };
 
   const submit = data => {
-    console.log(data.email);
     asyncFetch(data)
       .then(response => {
-        console.log(response);
         dispatch({ type: "forgotPasswordRequest", payload: response });
       })
       .then(setSuccess(true));
