@@ -5,8 +5,8 @@
   grid-template-rows: 50px;
   grid-auto-rows: 1fr;
   overflow: auto;
-  z-index: -1;
-  pointer-events: none;
+  /* z-index: -1; */
+  /* pointer-events: none; */
 }
 .calendar-container {
   width: 100%;
@@ -16,7 +16,8 @@
   border-radius: 10px;
   background: #fff;
   max-width: 1200px;
-  z-index: -1;
+  /* z-index: -1; */
+  /* pointer-events: none; */
 }
 .calendar-header {
   text-align: center;
@@ -57,8 +58,8 @@
   box-sizing: border-box;
   color: #98a0a6;
   position: relative;
-  pointer-events: none;
-  z-index: 1;
+  /* pointer-events: none; */
+  /* z-index: 1; */
 }
 .day:nth-of-type(7n + 7) {
   border-right: 0;
@@ -113,6 +114,7 @@
   background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f9f9fa' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
   cursor: not-allowed;
+  /* pointer-events: none; */
 }
 
 .activity-card {

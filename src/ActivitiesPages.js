@@ -2,11 +2,10 @@ import React from "react";
 import { useRoutes, navigate } from "hookrouter";
 
 import { useStore } from "./store/useStore";
-import ActivitiesPages from "./ActivitiesPages";
 
-import DashboardPage from "./components/pages/DashboardPage";
+import EditActivityPage from "./components/pages/EditActivityPage";
 
-const AuthedPages = props => {
+const ActivitiesPages = props => {
   const { state } = useStore();
 
   const isAuthenticated = !!state.user.token;
@@ -16,8 +15,9 @@ const AuthedPages = props => {
   }
 
   const authedRoutes = {
-    "/dashboard": () => <DashboardPage />,
-    "/activities*": () => <ActivitiesPages />
+    "/edit/:activityId": ({ activityId }) => (
+      <EditActivityPage activityId={activityId} />
+    )
   };
 
   const routeResult = useRoutes(authedRoutes);
@@ -25,4 +25,4 @@ const AuthedPages = props => {
   return routeResult;
 };
 
-export default AuthedPages;
+export default ActivitiesPages;

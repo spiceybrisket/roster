@@ -6,13 +6,13 @@ import Calendar from "../misc/Calendar";
 
 const DashboardPage = () => {
   const { state } = useStore();
-  console.log(state);
 
   const isConfirmed = !!state.user.confirmed;
+
   return (
     <div>
-      <h2>Your Dashobaord</h2>
       {!isConfirmed && <ConfirmEmailMessage />}
+      <h2>Your Dashobaord</h2>
       <Calendar />
     </div>
   );

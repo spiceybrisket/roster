@@ -7,7 +7,10 @@ import AuthedPages from "./AuthedPages";
 import LoginPage from "./components/pages/LoginPage";
 import ForgotPasswordPage from "./components/pages/ForgotPasswordPage";
 import ResetPasswordPage from "./components/pages/ResetPasswordPage";
+import ConfirmationPage from "./components/pages/ConfirmationPage";
 
+import Header from "./components/headers/Header";
+import HeaderAuthed from "./components/headers/HeaderAuthed";
 import TopNavigation from "./components/navigaton/TopNavigation";
 
 const App = () => {
@@ -34,6 +37,7 @@ const App = () => {
     "/reset_password/:token": ({ token }) => (
       <ResetPasswordPage token={token} />
     ),
+    "/confirmation/:token": ({ token }) => <ConfirmationPage token={token} />,
 
     // Everything authenticated is handled in here.
     "/authed*": () => <AuthedPages />
@@ -44,8 +48,12 @@ const App = () => {
   const isAuthenticasted = !!state.user.token;
 
   return (
-    <div className="ui container">
+    <div>
+      <br />
+      {isAuthenticasted ? <HeaderAuthed /> : <Header />}
       {isAuthenticasted && <TopNavigation />}
+      <br />
+      <br />
       {result || "Not found"}
     </div>
   );

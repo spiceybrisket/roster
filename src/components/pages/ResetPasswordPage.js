@@ -8,6 +8,7 @@ import ResetPasswordForm from "../forms/ResetPasswordForm";
 const ResetPasswordPage = ({ token }) => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("Validating Token");
 
   const validateToken = token => {
     return new Promise((resolve, reject) => {
@@ -44,6 +45,7 @@ const ResetPasswordPage = ({ token }) => {
       .catch(() => {
         setSuccess(false);
         setLoading(false);
+        setMessage("Invalid Token");
       });
   });
 
@@ -51,11 +53,11 @@ const ResetPasswordPage = ({ token }) => {
 
   return (
     <div>
-      {loading && <Message>Loading</Message>}
+      {loading && <Message>{message}</Message>}
       {!loading && success && (
         <ResetPasswordForm submit={submit} token={token} />
       )}
-      {!loading && !success && <Message>Invalid Token</Message>}
+      {!loading && !success && <Message>{message}</Message>}
     </div>
   );
 };

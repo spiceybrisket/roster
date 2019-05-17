@@ -9,15 +9,19 @@ export const userActions = {
   },
   logout: payload => {
     localStorage.removeItem("rosterJWT");
-    return { user: payload };
+    return { user: {} };
   },
-  query_running: payload => {
+  query_running: () => {
     return { queryRunning: true };
   },
-  query_end: payload => {
+  query_end: () => {
     return { queryRunning: false };
   },
   forgotPasswordRequest: payload => {
     return;
+  },
+  confirmUserEmail: payload => {
+    localStorage.rosterJWT = payload.token;
+    return { user: payload };
   }
 };

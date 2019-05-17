@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Message, Button } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 import { useStore } from "../../store/useStore";
 import isEmail from "validator/lib/isEmail";
 import InLineError from "../messages/InLineError";
@@ -33,12 +33,6 @@ const App = props => {
   return (
     <div className="ui container">
       <Form onSubmit={onSubmit} loading={state.loading}>
-        {errors.global && (
-          <Message negative>
-            <Message.Header negative>Something went wrong!</Message.Header>
-            <p>{errors.global}</p>
-          </Message>
-        )}
         <Form.Field error={!!errors.email}>
           <label htmlFor="email">Email:</label>
           <input

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useStore } from "../../store/useStore";
 import { format, getMonth, subMonths, addMonths } from "date-fns";
-import { Icon } from "semantic-ui-react";
-import { A } from "hookrouter";
+import { Icon, Dimmer, Loader } from "semantic-ui-react";
 import uuid from "uuid";
 import api from "../../store/api";
 
@@ -16,7 +15,6 @@ const useFetch = data => {
   useEffect(() => {
     (async () => {
       const res = await api.activities.fectUserActivities(data);
-      console.log(res);
       const responseData = await res.data;
       setActivities(responseData);
       setLoading(false);
@@ -28,6 +26,7 @@ const useFetch = data => {
 
 const Calendar = () => {
   const { state, dispatch } = useStore();
+
   const [data, setData] = useState({
     selectedDate: format(new Date(), "YYYY-MM-DD"),
     userId: state.user.companyStaffId
@@ -53,6 +52,25 @@ const Calendar = () => {
     };
 
     setData(newData);
+  };
+
+  const cardClick = e => {
+    const id = e.target.id;
+    const asyncFetch = activityId => {
+      return new Promise((resolve, reject) => {
+        api.activities
+          .fetchActivity(activityId)
+          .then(resposneData => {
+            resolve(resposneData.data);
+          })
+          .catch(response => {
+            reject("Api call failed!");
+          });
+      });
+    };
+    asyncFetch(id).then(response =>
+      dispatch({ type: "getEditActivity", payload: response })
+    );
   };
 
   const renderCalendar = () => {
@@ -84,20 +102,17 @@ const Calendar = () => {
                 {format(day.date, "DD")}
                 {day.activities.map(activity => {
                   return (
-                    <A
+                    <ActivityCard
+                      id={activity.id}
                       key={uuid.v4()}
-                      href={`/activities/edit/${activity.id}`}
-                      style={{ pointerEvents: "auto" }}
-                    >
-                      <ActivityCard
-                        key={uuid.v4()}
-                        date={activity.date}
-                        name={activity.name}
-                        background={activity.colour}
-                        shortName={activity.short_name}
-                        truck={activity.truck}
-                      />
-                    </A>
+                      date={activity.date}
+                      name={activity.name}
+                      background={activity.colour}
+                      shortName={activity.short_name}
+                      truck={activity.truck}
+                      activityId={activity.id}
+                      cardClick={cardClick}
+                    />
                   );
                 })}
               </div>
@@ -110,7 +125,11 @@ const Calendar = () => {
 
   return (
     <React.Fragment>
-      {Array.isArray(activities) ? (
+      {loading === true ? (
+        <Dimmer active>
+          <Loader indeterminate>Preparing Calendar</Loader>
+        </Dimmer>
+      ) : Array.isArray(activities) ? (
         renderCalendar()
       ) : (
         <p>No Activities Found</p>

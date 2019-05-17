@@ -1,7 +1,8 @@
 import React from "react";
 import { Card } from "semantic-ui-react";
+import { setLinkProps } from "hookrouter";
 
-const ActivityCard = ({ name, background }) => {
+const ActivityCard = ({ name, background, activityId, cardClick }) => {
   const determineActivityTextColour = bgColour => {
     const r = parseInt(bgColour.substr(0, 2), 16);
     const g = parseInt(bgColour.substr(2, 2), 16);
@@ -22,10 +23,22 @@ const ActivityCard = ({ name, background }) => {
     color: determineActivityTextColour(background)
   };
 
+  const idText = `${activityId}`;
+
   return (
-    <Card fluid style={cardStyle}>
-      <Card.Content>
-        <Card.Description style={cardTextStyle}>{name}</Card.Description>
+    <Card
+      fluid
+      style={cardStyle}
+      {...setLinkProps({
+        href: `/authed/activities/edit/${activityId}`,
+        onClick: cardClick
+      })}
+      id={idText}
+    >
+      <Card.Content id={idText}>
+        <Card.Description id={idText} style={cardTextStyle}>
+          {name}
+        </Card.Description>
       </Card.Content>
     </Card>
   );

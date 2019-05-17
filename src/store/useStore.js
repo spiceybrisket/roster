@@ -1,18 +1,22 @@
-import React, { createContext, useReducer, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { userInitialState, userActions } from "./userActions";
+import { activitiesInitialState, activityActions } from "./activityActions";
+import { useLocalStorageReducer } from "react-storage-hooks";
 
-const isUserLoggedIn = !!localStorage.getItem("rosterJWT");
+// const isUserLoggedIn = !!localStorage.getItem("rosterJWT");
 // combine initial states
 const initialState = {
   ...userInitialState,
-  isUserLoggedIn
+  ...activitiesInitialState,
+  queryRunning: false
 };
 
-const StoreContext = createContext(initialState);
+export const StoreContext = createContext(initialState);
 
 // combine actions
 const Actions = {
-  ...userActions
+  ...userActions,
+  ...activityActions
 };
 
 const reducer = (state, action) => {
@@ -44,7 +48,11 @@ const wrapperDispatch = dispatch => {
 };
 
 export const StoreProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useLocalStorageReducer(
+    "rosterState",
+    reducer,
+    initialState
+  );
 
   return (
     <StoreContext.Provider
